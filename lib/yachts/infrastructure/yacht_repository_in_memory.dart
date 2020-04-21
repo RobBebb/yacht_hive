@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:yacht_provider/yachts/application/yachts.dart';
-
 import '../infrastructure/yacht_repository.dart';
 import '../domain/yacht.dart';
 
@@ -48,31 +46,42 @@ class YachtRepositoryInline implements YachtRepository {
     );
   }
 
-    Future<Yacht> selectYacht(int id) {
+  Future<Yacht> selectYacht(int id) {
     return Future.delayed(
       Duration(seconds: 1),
       () {
-        var selectedYacht = _yachts.firstWhere((yacht) => yacht.id == id)
+        var selectedYacht = _yachts.firstWhere((yacht) => yacht.id == id);
         return selectedYacht;
       },
     );
   }
 
-    Future<Yacht> updateYacht(Yacht yacht) {
+  Future<void> updateYacht(int id, Yacht yacht) {
     return Future.delayed(
       Duration(seconds: 1),
       () {
+        final yachtIndex = _yachts.indexWhere((yacht) => yacht.id == id);
         var updatedYacht = Yacht(
           id: yacht.id,
           name: yacht.name,
           imo: yacht.imo,
           length: yacht.length,
         );
-        _yachts.removeAt(index);
-        return newYacht;
+        _yachts[yachtIndex] = updatedYacht;
+        //_yachts.removeAt(index);
+        return;
       },
     );
   }
 
-
+  Future<void> deleteYacht(int id) {
+    return Future.delayed(
+      Duration(seconds: 1),
+      () {
+        final yachtIndex = _yachts.indexWhere((yacht) => yacht.id == id);
+        _yachts.removeAt(yachtIndex);
+        return;
+      },
+    );
+  }
 }
