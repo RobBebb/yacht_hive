@@ -8,15 +8,57 @@ class YachtRepositoryInline implements YachtRepository {
     Yacht(
       id: 1,
       name: 'C2',
-      imo: 1234567,
-      length: 85.5,
+      imo: 1009833,
+      length: 88.5,
     ),
     Yacht(
-      id: 1,
+      id: 2,
       name: 'Diamond',
       imo: 7654321,
       length: 65,
-    )
+    ),
+    Yacht(
+      id: 3,
+      name: 'La Familia',
+      imo: 1012660,
+      length: 55,
+    ),
+    Yacht(
+      id: 4,
+      name: 'Lady Lara',
+      imo: 1012311,
+      length: 91,
+    ),
+    Yacht(
+      id: 5,
+      name: 'Griff',
+      imo: 9033880,
+      length: 42,
+    ),
+    Yacht(
+      id: 6,
+      name: 'Her Honor',
+      imo: 8992039,
+      length: 44.85,
+    ),
+    Yacht(
+      id: 7,
+      name: 'Serenity J',
+      imo: 1012385,
+      length: 55,
+    ),
+    Yacht(
+      id: 8,
+      name: 'Skat',
+      imo: 1007287,
+      length: 70.7,
+    ),
+    Yacht(
+      id: 8,
+      name: 'SYZYGY 818',
+      imo: 9798258,
+      length: 77.25,
+    ),
   ];
 
   @override
