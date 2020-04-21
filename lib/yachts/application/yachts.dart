@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../infrastructure/yacht_repository_inline.dart';
+import '../infrastructure/yacht_repository_in_memory.dart';
 import '../domain/yacht.dart';
 
 class Yachts with ChangeNotifier {
