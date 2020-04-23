@@ -76,8 +76,13 @@ class YachtRepositoryInline implements YachtRepository {
       Duration(seconds: 1),
       () {
         final random = Random();
+        var newId = random.nextInt(1000);
+        // make sure the id is unique
+        while (_yachts.indexWhere((yacht) => yacht.id == newId) != null) {
+          newId = random.nextInt(1000);
+        }
         var newYacht = Yacht(
-          id: random.nextInt(100),
+          id: newId,
           name: yacht.name,
           imo: yacht.imo,
           length: yacht.length,

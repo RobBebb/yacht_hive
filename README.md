@@ -41,3 +41,7 @@ The names I have used are:
 ## Provider
 
 Within the application folder a yachts.dart file defines a class that implements ChangeNotifier. This class maintains a list of all the yachts which will be used by the user interface for updates.
+
+## Error Processing
+
+I see most of the error processing happening in the infrastructure layer. This is where all the processing that deals with external packages will take place.
