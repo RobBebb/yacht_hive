@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:yacht_provider/yachts/infrastructure/yacht_repository.dart';
 import '../infrastructure/yacht_repository_in_memory.dart';
 import '../domain/yacht.dart';
 
 class Yachts with ChangeNotifier {
+
   List<Yacht> _yachts = [];
 
   List<Yacht> get yachts {
@@ -12,6 +14,7 @@ class Yachts with ChangeNotifier {
   Yacht fetchYachtByName(String name) {
     return _yachts.firstWhere((yacht) => yacht.name == name);
   }
+
 
   Future<void> fetchAndSetYachts() async {
     YachtRepositoryInline yachtRepository = YachtRepositoryInline();
@@ -27,6 +30,7 @@ class Yachts with ChangeNotifier {
   Future<void> addYacht(Yacht yacht) async {
     YachtRepositoryInline yachtRepository = YachtRepositoryInline();
     final newYacht = await yachtRepository.insertYacht(yacht);
+    print('RobBebb addYacht. Id: ${newYacht.id}');
     _yachts.add(newYacht);
     notifyListeners();
   }
@@ -39,8 +43,10 @@ class Yachts with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> removeYacht(int id) {
+  Future<void> removeYacht(int id) async {
+    YachtRepositoryInline yachtRepository = YachtRepositoryInline();
     final yachtIndex = _yachts.indexWhere((yacht) => yacht.id == id);
+    await yachtRepository.deleteYacht(id);
     _yachts.removeAt(yachtIndex);
   }
 }

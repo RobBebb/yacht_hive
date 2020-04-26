@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.amber,
           primaryColorLight: Colors.amber[100],
-          primaryColorDark: Colors.amber[300],
+          primaryColorDark: Colors.amber[700],
           accentColor: Colors.lightGreenAccent,
           fontFamily: 'SourceSansPro',
           textTheme: ThemeData.light().textTheme.copyWith(

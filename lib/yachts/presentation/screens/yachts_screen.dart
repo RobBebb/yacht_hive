@@ -5,13 +5,30 @@ import '../../application/yachts.dart';
 import '../widgets/yacht_card.dart';
 import './edit_yacht_screen.dart';
 
-class YachtsScreen extends StatelessWidget {
+class YachtsScreen extends StatefulWidget {
   static const routeName = 'yachtscreen';
+
+  @override
+  _YachtsScreenState createState() => _YachtsScreenState();
+}
+
+class _YachtsScreenState extends State<YachtsScreen> {
+  @override
+  void initState() {
+    Provider.of<Yachts>(context, listen: false).fetchAndSetYachts();
+    super.initState();
+  }
+
+  _refreshYachts(BuildContext context) {
+    Provider.of<Yachts>(context, listen: false).yachts;
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColorDark,
+        backgroundColor: Theme.of(context).primaryColor,
         title: Row(
           children: <Widget>[
             Image.asset('assets/images/historic-ship-48.png'),
@@ -35,7 +52,7 @@ class YachtsScreen extends StatelessWidget {
         ],
       ),
       body: FutureBuilder(
-        future: Provider.of<Yachts>(context, listen: false).fetchAndSetYachts(),
+        future: _refreshYachts(context),
         builder: (ctx, dataSnapShot) {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
             return Center(
