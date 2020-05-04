@@ -29,6 +29,26 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
     length: null,
   );
 
+  var _isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final yachtId = ModalRoute.of(context).settings.arguments as int;
+      if (yachtId != null) {
+        _editedYacht =
+            Provider.of<Yachts>(context, listen: false).findYachtById(yachtId);
+        _initValues = {
+          'name': _editedYacht.name,
+          'imo': _editedYacht.imo.toString(),
+          'length': _editedYacht.length.toString(),
+        };
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   void dispose() {
     _imoFocusNode.dispose();
@@ -36,14 +56,18 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
     super.dispose();
   }
 
-  //TODO Working on _saveForm
   Future<void> _saveForm() async {
     final isValid = _form.currentState.validate();
     if (!isValid) {
       return;
     }
     _form.currentState.save();
-    await Provider.of<Yachts>(context, listen: false).addYacht(_editedYacht);
+    if (_editedYacht.id != null) {
+      await Provider.of<Yachts>(context, listen: false)
+          .maintainYacht(_editedYacht.id, _editedYacht);
+    } else {
+      await Provider.of<Yachts>(context, listen: false).addYacht(_editedYacht);
+    }
     Navigator.of(context).pop();
   }
 

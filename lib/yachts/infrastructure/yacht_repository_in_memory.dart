@@ -3,7 +3,9 @@ import 'dart:math';
 import '../infrastructure/yacht_repository.dart';
 import '../domain/yacht.dart';
 
-class YachtRepositoryInline implements YachtRepository {
+// This implementation of repository has a problem because the class keeps
+// getting reinstantiated so the in memory list keeps dissappearing.
+class YachtRepositoryInMemory implements YachtRepository {
   List<Yacht> _yachts = [
     Yacht(
       id: 1,
@@ -72,14 +74,19 @@ class YachtRepositoryInline implements YachtRepository {
     );
   }
 
-  Future<Yacht> insertYacht(Yacht yacht) {
+  Future<int> insertYacht(Yacht yacht) {
+    print('RobBebb insertYacht');
+
     return Future.delayed(
       Duration(seconds: 1),
       () {
         final random = Random();
         var newId = random.nextInt(1000);
+
         // make sure the id is unique
-        while (_yachts.indexWhere((existingYacht) => existingYacht.id == newId) != -1) {
+        while (
+            _yachts.indexWhere((existingYacht) => existingYacht.id == newId) !=
+                -1) {
           newId = random.nextInt(1000);
         }
         var newYacht = Yacht(
@@ -90,33 +97,38 @@ class YachtRepositoryInline implements YachtRepository {
         );
         print('RobBebb insertYacht. Name: ${newYacht.name}');
         _yachts.add(newYacht);
-        return newYacht;
+        return newYacht.id;
       },
     );
   }
 
   Future<Yacht> selectYacht(int id) {
+    print('RobBebb selectYacht');
+
     return Future.delayed(
       Duration(seconds: 1),
       () {
-        var selectedYacht = _yachts.firstWhere((yacht) => yacht.id == id);
-        return selectedYacht;
+        // var selectedYacht = _yachts.firstWhere((yacht) => yacht.id == id);
+        // return selectedYacht;
+        return;
       },
     );
   }
 
-  Future<void> updateYacht(int id, Yacht yacht) {
+  Future<void> updateYacht(Yacht yacht) {
+    print('RobBebb updateYacht');
+
     return Future.delayed(
       Duration(seconds: 1),
       () {
-        final yachtIndex = _yachts.indexWhere((yacht) => yacht.id == id);
-        var updatedYacht = Yacht(
-          id: yacht.id,
-          name: yacht.name,
-          imo: yacht.imo,
-          length: yacht.length,
-        );
-        _yachts[yachtIndex] = updatedYacht;
+        // final yachtIndex = _yachts.indexWhere((yacht) => yacht.id == id);
+        // var updatedYacht = Yacht(
+        //   id: yacht.id,
+        //   name: yacht.name,
+        //   imo: yacht.imo,
+        //   length: yacht.length,
+        // );
+        // _yachts[yachtIndex] = updatedYacht;
         //_yachts.removeAt(index);
         return;
       },
@@ -124,11 +136,15 @@ class YachtRepositoryInline implements YachtRepository {
   }
 
   Future<void> deleteYacht(int id) {
+    print('RobBebb deleteYacht');
+
     return Future.delayed(
       Duration(seconds: 1),
       () {
-        final yachtIndex = _yachts.indexWhere((yacht) => yacht.id == id);
-        _yachts.removeAt(yachtIndex);
+        // final yachtIndex = _yachts.indexWhere((yacht) => yacht.id == id);
+        // print('RobBebb deleteYacht. id: ${id}');
+        // print('RobBebb deleteYacht. index: $yachtIndex');
+        // _yachts.removeAt(yachtIndex);
         return;
       },
     );

@@ -49,7 +49,7 @@ class YachtCard extends StatelessWidget {
                     icon: Icon(Icons.edit),
                     onPressed: () {
                       Navigator.of(context).pushNamed(EditYachtScreen.routeName,
-                          arguments: yacht);
+                          arguments: yacht.id);
                     },
                     color: Theme.of(context).primaryColorDark,
                   ),

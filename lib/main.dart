@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yacht_provider/yachts/presentation/screens/edit_yacht_screen.dart';
 
 import './yachts/application/yachts.dart';
 import './yachts/presentation/screens/yachts_screen.dart';
