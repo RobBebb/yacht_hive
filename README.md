@@ -1,13 +1,6 @@
-# yacht_provider
+# yacht_hive
 
-This is a prototype project to investigate using an abstract repository to cater for being able to use different technologies to store data.
-
-It will have one model for a yacht and will include the CRUD actions against that model. Necessary screens will be built to perform the actions.
-
-Initially it will cater for storing the data in memory, in a local sqlite database and remotely in firebase.
-The Provider state management package will be used.
-
-It will also contain a robust sample folder structure for a medium sized app.
+This is a prototype project to investigate using Hive.
 
 ## Folder Structure
 
@@ -37,10 +30,6 @@ The names I have used are:
 * selectYacht - get back one yacht based on it's id
 * updateYacht - change the details of a yacht
 * deleteYacht - remove a yacht from the data  store based on it's id
-
-## Provider
-
-Within the application folder a yachts.dart file defines a class that implements ChangeNotifier. This class maintains a list of all the yachts which will be used by the user interface for updates.
 
 ## Error Processing
 

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:hive/hive.dart';
 
 import '../../domain/yacht.dart';
-import '../../application/yachts.dart';
+
+const String yachtBoxName = 'yacht';
 
 class EditYachtScreen extends StatefulWidget {
   static const routeName = 'edityachtscreen';
@@ -16,6 +17,9 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
   var _imoFocusNode = FocusNode();
   var _lengthFocusNode = FocusNode();
 
+  String yachtBoxName = 'yacht';
+  int yachtIndex;
+
   var _initValues = {
     'name': '',
     'imo': '',
@@ -23,7 +27,6 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
   };
 
   var _editedYacht = Yacht(
-    id: null,
     name: '',
     imo: null,
     length: null,
@@ -34,10 +37,10 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final yachtId = ModalRoute.of(context).settings.arguments as int;
-      if (yachtId != null) {
-        _editedYacht =
-            Provider.of<Yachts>(context, listen: false).findYachtById(yachtId);
+      yachtIndex = ModalRoute.of(context).settings.arguments as int;
+      if (yachtIndex != null) {
+        Box<Yacht> yachtBox = Hive.box<Yacht>(yachtBoxName);
+        _editedYacht = yachtBox.getAt(yachtIndex);
         _initValues = {
           'name': _editedYacht.name,
           'imo': _editedYacht.imo.toString(),
@@ -62,11 +65,11 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
       return;
     }
     _form.currentState.save();
-    if (_editedYacht.id != null) {
-      await Provider.of<Yachts>(context, listen: false)
-          .maintainYacht(_editedYacht.id, _editedYacht);
+    Box<Yacht> yachtsBox = Hive.box<Yacht>(yachtBoxName);
+    if (yachtIndex != null) {
+      yachtsBox.putAt(yachtIndex, _editedYacht);
     } else {
-      await Provider.of<Yachts>(context, listen: false).addYacht(_editedYacht);
+      yachtsBox.add(_editedYacht);
     }
     Navigator.of(context).pop();
   }
@@ -85,7 +88,7 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
             Text(
               'Add Yacht',
               style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.title.fontSize),
+                  fontSize: Theme.of(context).textTheme.headline6.fontSize),
             ),
           ],
         ),
@@ -117,7 +120,6 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
                 },
                 onSaved: (value) {
                   _editedYacht = Yacht(
-                    id: _editedYacht.id,
                     name: value,
                     imo: _editedYacht.imo,
                     length: _editedYacht.length,
@@ -147,7 +149,6 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
                 },
                 onSaved: (value) {
                   _editedYacht = Yacht(
-                    id: _editedYacht.id,
                     name: _editedYacht.name,
                     imo: int.parse(value),
                     length: _editedYacht.length,
@@ -177,7 +178,6 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
                 },
                 onSaved: (value) {
                   _editedYacht = Yacht(
-                    id: _editedYacht.id,
                     name: _editedYacht.name,
                     imo: _editedYacht.imo,
                     length: double.parse(value),

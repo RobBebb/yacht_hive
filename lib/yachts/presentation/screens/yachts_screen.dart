@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
 
-import '../../application/yachts.dart';
 import '../widgets/yacht_card.dart';
 import './edit_yacht_screen.dart';
+import '../../domain/yacht.dart';
+
+const String yachtBoxName = 'yacht';
 
 class YachtsScreen extends StatefulWidget {
   static const routeName = 'yachtscreen';
@@ -13,16 +16,16 @@ class YachtsScreen extends StatefulWidget {
 }
 
 class _YachtsScreenState extends State<YachtsScreen> {
-  @override
-  void initState() {
-    Provider.of<Yachts>(context, listen: false).fetchAndSetYachts();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   Provider.of<Yachts>(context, listen: false).fetchAndSetYachts();
+  //   super.initState();
+  // }
 
-  _refreshYachts(BuildContext context) {
-    Provider.of<Yachts>(context, listen: false).yachts;
-    
-  }
+  // _refreshYachts(BuildContext context) {
+  //   Provider.of<Yachts>(context, listen: false).yachts;
+
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,7 @@ class _YachtsScreenState extends State<YachtsScreen> {
             Text(
               'Yachts',
               style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.title.fontSize),
+                  fontSize: Theme.of(context).textTheme.headline6.fontSize),
             ),
           ],
         ),
@@ -51,27 +54,66 @@ class _YachtsScreenState extends State<YachtsScreen> {
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: _refreshYachts(context),
-        builder: (ctx, dataSnapShot) {
-          if (dataSnapShot.connectionState == ConnectionState.waiting) {
+      body: ValueListenableBuilder(
+        valueListenable: Hive.box<Yacht>(yachtBoxName).listenable(),
+        builder: (context, Box<Yacht> box, _) {
+          if (box.values.isEmpty) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: Text('No Yachts'),
             );
-          } else {
-            if (dataSnapShot.error != null) {
-              return Center(
-                child: Text('An error occurred.'),
-              );
-            } else {
-              return Consumer<Yachts>(
-                builder: (ctx, yachtData, child) => ListView.builder(
-                  itemCount: yachtData.yachts.length,
-                  itemBuilder: (ctx, i) => YachtCard(yachtData.yachts[i]),
+          }
+          return ListView.builder(
+            itemCount: box.values.length,
+            itemBuilder: (context, index) {
+              Yacht currentYacht = box.getAt(index);
+              return YachtCard(currentYacht, index);
+              
+              // Card(
+              //   clipBehavior: Clip.antiAlias,
+              //   child: InkWell(
+              //     onLongPress: () {/* ... */},
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(8.0),
+              //       child: Column(
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: <Widget>[
+              //           SizedBox(
+              //             height: 5,
+              //           ),
+              //           Text(currentYacht.name),
+              //           SizedBox(
+              //             height: 5,
+              //           ),
+              //           Text("Index: $index"),
+              //           SizedBox(
+              //             height: 5,
+              //           ),
+              //           Text("imo: ${currentYacht.imo}"),
+              //           SizedBox(
+              //             height: 5,
+              //           ),
+              //           Text("key: ${currentYacht.key}"),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // );
+            },
+          );
+        },
+      ),
+      floatingActionButton: Builder(
+        builder: (context) {
+          return FloatingActionButton(backgroundColor: Theme.of(context).primaryColor,
+            child: Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => EditYachtScreen(),
                 ),
               );
-            }
-          }
+            },
+          );
         },
       ),
     );

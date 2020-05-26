@@ -1,13 +1,20 @@
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 
-class Yacht {
-  final int id;
+part 'yacht.g.dart';
+
+@HiveType(typeId: 0)
+class Yacht extends HiveObject {
+  @HiveField(0)
   final String name;
+
+  @HiveField(1)
   final int imo;
+
+  @HiveField(2)
   final double length;
 
   Yacht({
-    @required this.id,
     @required this.name,
     @required this.imo,
     this.length,
@@ -15,7 +22,6 @@ class Yacht {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'name': name,
       'imo': imo,
       'length': length,
@@ -26,7 +32,6 @@ class Yacht {
     if (map == null) return null;
 
     return Yacht(
-      id: map['id'],
       name: map['name'],
       imo: map['imo'],
       length: map['length'],
@@ -35,6 +40,6 @@ class Yacht {
 
   @override
   String toString() {
-    return 'Yacht(id: $id, name: $name, imo: $imo, length: $length)';
+    return 'Yacht(name: $name, imo: $imo, length: $length)';
   }
 }

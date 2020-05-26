@@ -1,14 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:hive/hive.dart';
 
 import '../../domain/yacht.dart';
-import '../../application/yachts.dart';
+// import '../../application/yachts.dart';
 import '../screens/edit_yacht_screen.dart';
 
-class YachtCard extends StatelessWidget {
-  final Yacht yacht;
+  const String yachtBoxName = 'yacht';
 
-  YachtCard(this.yacht);
+class YachtCard extends StatefulWidget {
+  final Yacht yacht;
+  final int yachtIndex;
+
+  YachtCard(this.yacht, this.yachtIndex);
+
+  @override
+  _YachtCardState createState() => _YachtCardState();
+}
+
+class _YachtCardState extends State<YachtCard> {
+  
+  void onYachtDelete() {
+    Box<Yacht> yachtBox = Hive.box<Yacht>(yachtBoxName);
+    yachtBox.deleteAt(widget.yachtIndex);
+    // Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +38,7 @@ class YachtCard extends StatelessWidget {
               Column(
                 children: <Widget>[
                   Text(
-                    yacht.name,
+                    widget.yacht.name,
                     style: TextStyle(
                       fontSize: 30,
                     ),
@@ -32,13 +47,13 @@ class YachtCard extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    'IMO: ${yacht.imo.toString()}',
+                    'IMO: ${widget.yacht.imo.toString()}',
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
-                    'Length: ${yacht.length.toString()}',
+                    'Length: ${widget.yacht.length.toString()}',
                   ),
                 ],
               ),
@@ -49,20 +64,13 @@ class YachtCard extends StatelessWidget {
                     icon: Icon(Icons.edit),
                     onPressed: () {
                       Navigator.of(context).pushNamed(EditYachtScreen.routeName,
-                          arguments: yacht.id);
+                          arguments: widget.yachtIndex);
                     },
                     color: Theme.of(context).primaryColorDark,
                   ),
                   IconButton(
                     icon: Icon(Icons.delete),
-                    onPressed: () async {
-                      await Provider.of<Yachts>(
-                        context,
-                        listen: false,
-                      ).removeYacht(
-                        yacht.id,
-                      );
-                    },
+                    onPressed: onYachtDelete,
                     color: Theme.of(context).errorColor,
                   )
                 ],

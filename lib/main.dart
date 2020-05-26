@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/rendering.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-import './yachts/application/yachts.dart';
 import './yachts/presentation/screens/yachts_screen.dart';
 import './yachts/presentation/screens/edit_yacht_screen.dart';
+import './yachts/domain/yacht.dart';
 
-void main() => runApp(MyApp());
+const String yachtBoxName = 'yacht';
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter<Yacht>(YachtAdapter());
+  await Hive.openBox<Yacht>(yachtBoxName);
+  runApp(
+    MyApp(),
+  );
+  // await Hive.close();
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: Yachts(),
-      child: MaterialApp(
+    return MaterialApp(
         title: 'Sea Days',
         theme: ThemeData(
           primarySwatch: Colors.amber,
@@ -21,7 +30,7 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.lightGreenAccent,
           fontFamily: 'SourceSansPro',
           textTheme: ThemeData.light().textTheme.copyWith(
-                title: TextStyle(
+                headline6: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
@@ -32,7 +41,6 @@ class MyApp extends StatelessWidget {
           YachtsScreen.routeName: (ctx) => YachtsScreen(),
           EditYachtScreen.routeName: (ctx) => EditYachtScreen(),
         },
-      ),
-    );
+      );
   }
 }
