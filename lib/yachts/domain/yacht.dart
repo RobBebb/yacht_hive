@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:equatable/equatable.dart';
 
 part 'yacht.g.dart';
 
 @HiveType(typeId: 0)
-class Yacht extends HiveObject {
+class Yacht extends Equatable with HiveObject {
   @HiveField(0)
   final String name;
 
@@ -20,6 +21,9 @@ class Yacht extends HiveObject {
     this.length,
   });
 
+  @override 
+  List<Object> get props => [name, imo, length];
+
   Map<String, dynamic> toMap() {
     return {
       'name': name,
@@ -30,7 +34,6 @@ class Yacht extends HiveObject {
 
   static Yacht fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
-
     return Yacht(
       name: map['name'],
       imo: map['imo'],

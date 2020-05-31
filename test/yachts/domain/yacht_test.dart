@@ -28,7 +28,7 @@ void main() {
       expect(yacht.name, 'Bbb');
       expect(yacht.imo, 2222222);
       expect(yacht.length, 222.2);
-      // test 123
+
 
       print(yacht);
     });
