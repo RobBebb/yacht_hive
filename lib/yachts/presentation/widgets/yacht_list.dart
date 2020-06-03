@@ -9,7 +9,7 @@ class YachtList extends StatelessWidget {
     return ListView.builder(
       itemBuilder: (context, index) {
         return YachtTile(
-          titleIndex: index,
+          tileIndex: index,
         );
       },
       itemCount: Provider.of<YachtData>(context).yachtCount,
