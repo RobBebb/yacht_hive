@@ -5,18 +5,18 @@ import 'package:yacht_hive/yachts/domain/yacht_data.dart';
 import 'package:yacht_hive/yachts/presentation/screens/yacht_view_screen.dart';
 
 class YachtTile extends StatelessWidget {
-  final int titleIndex;
+  final int tileIndex;
 
-  const YachtTile({Key key, this.titleIndex});
+  const YachtTile({Key key, this.tileIndex});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<YachtData>(
       builder: (context, yachtData, child) {
-        Yacht currentYacht = yachtData.getYacht(titleIndex);
+        Yacht currentYacht = yachtData.getYacht(tileIndex);
         return Container(
           decoration: BoxDecoration(
-              color: titleIndex % 2 == 0 ? Colors.grey : Colors.white),
+              color: tileIndex % 2 == 0 ? Colors.grey : Colors.white),
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: Colors.lightGreenAccent,
@@ -46,9 +46,14 @@ class YachtTile extends StatelessWidget {
             onTap: () {
               Provider.of<YachtData>(context, listen: false)
                   .setActiveYacht(currentYacht.key);
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return YachtViewScreen();
-              }));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return YachtViewScreen();
+                  },
+                ),
+              );
             },
           ),
         );
