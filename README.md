@@ -36,3 +36,10 @@ The names I have used are:
 I see most of the error processing happening in the infrastructure layer. This is where all the processing that deals with external packages will take place.
 
 I expect to be using the DARTZ package for error handling. Refer to these tutorials for more details [Reso Coder - Handle Errors Part 1](https://resocoder.com/2019/12/11/proper-error-handling-in-flutter-dart-1-principles/) and [Reso Coder - Functional Error Handling Part 2](https://resocoder.com/2019/12/14/functional-error-handling-in-flutter-dart-2-either-task-fp/) and [Codemagic Architecture](https://blog.codemagic.io/flutter-tutorial-app-arhitecture-beginners/)
+
+## Acknowledgements
+
+[Build Flutter Hive App with Provider tutorial by Waga](https://www.youtube.com/playlist?list=PLdBY1aYxSpPUsbJqPH2rRyaIG1aEUjwlD)
+
+[Flutter: Add Unit Tests to your App by Code With Andrea](https://www.youtube.com/watch?v=h0IbAIHAwnk)
+[Flutter: Deep Dive with Widget Tests and Mockito by Code With Andrea](https://www.youtube.com/watch?v=75i5VmTI6A0)

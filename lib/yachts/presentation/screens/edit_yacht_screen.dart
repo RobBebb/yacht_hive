@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+// import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
+import 'package:yacht_hive/yachts/domain/yacht_data.dart';
+import 'package:yacht_hive/yachts/domain/yacht_validator.dart';
 
 import '../../domain/yacht.dart';
 
@@ -17,8 +20,9 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
   var _imoFocusNode = FocusNode();
   var _lengthFocusNode = FocusNode();
 
-  String yachtBoxName = 'yacht';
-  int yachtIndex;
+  // String yachtBoxName = 'yacht';
+  // int yachtIndex;
+  Yacht yacht;
 
   var _initValues = {
     'name': '',
@@ -37,14 +41,14 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      yachtIndex = ModalRoute.of(context).settings.arguments as int;
-      if (yachtIndex != null) {
-        Box<Yacht> yachtBox = Hive.box<Yacht>(yachtBoxName);
-        _editedYacht = yachtBox.getAt(yachtIndex);
+      yacht = ModalRoute.of(context).settings.arguments as Yacht;
+      if (yacht != null) {
+        // Box<Yacht> yachtBox = Hive.box<Yacht>(yachtBoxName);
+        // _editedYacht = yachtBox.getAt(yachtIndex);
         _initValues = {
-          'name': _editedYacht.name,
-          'imo': _editedYacht.imo.toString(),
-          'length': _editedYacht.length.toString(),
+          'name': yacht.name,
+          'imo': yacht.imo.toString(),
+          'length': yacht.length.toString(),
         };
       }
     }
@@ -65,11 +69,15 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
       return;
     }
     _form.currentState.save();
-    Box<Yacht> yachtsBox = Hive.box<Yacht>(yachtBoxName);
-    if (yachtIndex != null) {
-      yachtsBox.putAt(yachtIndex, _editedYacht);
+    // Box<Yacht> yachtsBox = Hive.box<Yacht>(yachtBoxName);
+    if (yacht != null) {
+      // yachtsBox.putAt(yachtIndex, _editedYacht);
+      Provider.of<YachtData>(context, listen: false)
+          .editYacht(yacht: _editedYacht, yachtKey: yacht.key);
     } else {
-      yachtsBox.add(_editedYacht);
+      // yachtsBox.add(_editedYacht);
+      Provider.of<YachtData>(context, listen: false)
+          .addYacht(yacht: _editedYacht);
     }
     Navigator.of(context).pop();
   }
@@ -112,12 +120,7 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_imoFocusNode);
                 },
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please provide a name.';
-                  }
-                  return null;
-                },
+                validator: NameFieldValidator.validate,
                 onSaved: (value) {
                   _editedYacht = Yacht(
                     name: value,
@@ -135,18 +138,7 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_lengthFocusNode);
                 },
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter a imo.';
-                  }
-                  if (int.tryParse(value) == null) {
-                    return 'Please enter a valid number.';
-                  }
-                  if (int.parse(value) <= 0) {
-                    return ' Please enter a number greater than zero.';
-                  }
-                  return null;
-                },
+                validator: ImoFieldValidator.validate,
                 onSaved: (value) {
                   _editedYacht = Yacht(
                     name: _editedYacht.name,
@@ -164,18 +156,7 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
                 onFieldSubmitted: (_) {
                   _saveForm();
                 },
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter a length.';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Please enter a valid number.';
-                  }
-                  if (double.parse(value) <= 0) {
-                    return ' Please enter a number greater than zero.';
-                  }
-                  return null;
-                },
+                validator: LengthFieldValidator.validate,
                 onSaved: (value) {
                   _editedYacht = Yacht(
                     name: _editedYacht.name,
