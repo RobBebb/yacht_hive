@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:yacht_hive/yachts/domain/yacht_data.dart';
 import 'package:yacht_hive/yachts/domain/yacht_validator.dart';
@@ -20,8 +19,6 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
   var _imoFocusNode = FocusNode();
   var _lengthFocusNode = FocusNode();
 
-  // String yachtBoxName = 'yacht';
-  // int yachtIndex;
   Yacht yacht;
 
   var _initValues = {
@@ -43,8 +40,6 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
     if (_isInit) {
       yacht = ModalRoute.of(context).settings.arguments as Yacht;
       if (yacht != null) {
-        // Box<Yacht> yachtBox = Hive.box<Yacht>(yachtBoxName);
-        // _editedYacht = yachtBox.getAt(yachtIndex);
         _initValues = {
           'name': yacht.name,
           'imo': yacht.imo.toString(),
@@ -69,13 +64,10 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
       return;
     }
     _form.currentState.save();
-    // Box<Yacht> yachtsBox = Hive.box<Yacht>(yachtBoxName);
     if (yacht != null) {
-      // yachtsBox.putAt(yachtIndex, _editedYacht);
       Provider.of<YachtData>(context, listen: false)
           .editYacht(yacht: _editedYacht, yachtKey: yacht.key);
     } else {
-      // yachtsBox.add(_editedYacht);
       Provider.of<YachtData>(context, listen: false)
           .addYacht(yacht: _editedYacht);
     }

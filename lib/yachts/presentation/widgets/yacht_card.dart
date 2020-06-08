@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
-// import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:yacht_hive/yachts/domain/yacht_data.dart';
 
 import '../../domain/yacht.dart';
-// import '../../application/yachts.dart';
 import '../screens/edit_yacht_screen.dart';
 
 const String yachtBoxName = 'yacht';
 
 class YachtCard extends StatefulWidget {
-  // final Yacht yacht;
   final int yachtIndex;
 
-  // YachtCard({this.yacht, this.yachtIndex});
   YachtCard({this.yachtIndex});
 
   @override
@@ -24,11 +20,8 @@ class _YachtCardState extends State<YachtCard> {
   Yacht currentYacht;
 
   void onYachtDelete() {
-    // Box<Yacht> yachtBox = Hive.box<Yacht>(yachtBoxName);
-    // yachtBox.deleteAt(widget.yachtIndex);
     Provider.of<YachtData>(context, listen: false)
         .deleteYacht(currentYacht.key);
-    // Navigator.of(context).pop();
   }
 
   @override

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-// import 'package:hive_flutter/hive_flutter.dart';
-// import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:yacht_hive/yachts/domain/yacht_data.dart';
-// import 'package:yacht_hive/yachts/presentation/widgets/toast.dart';
 
 import '../widgets/yacht_card.dart';
 import './edit_yacht_screen.dart';
-// import '../../domain/yacht.dart';
 
 const String yachtBoxName = 'yacht';
 
@@ -24,11 +20,6 @@ class _YachtsScreenState extends State<YachtsScreen> {
     Provider.of<YachtData>(context, listen: false).getYachts();
     super.initState();
   }
-
-  // _refreshYachts(BuildContext context) {
-  //   Provider.of<Yachts>(context, listen: false).yachts;
-
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -68,53 +59,6 @@ class _YachtsScreenState extends State<YachtsScreen> {
         },
         itemCount: Provider.of<YachtData>(context).yachtCount,
         padding: EdgeInsets.fromLTRB(8.0, 6.0, 8.0, 4.0),
-        // ValueListenableBuilder(
-        //   valueListenable: Hive.box<Yacht>(yachtBoxName).listenable(),
-        //   builder: (context, Box<Yacht> box, _) {
-        //     if (box.values.isEmpty) {
-        //       return Center(
-        //         child: Text('No Yachts'),
-        //       );
-        //     }
-        //     return ListView.builder(
-        //       itemCount: box.values.length,
-        //       itemBuilder: (context, index) {
-        //         Yacht currentYacht = box.getAt(index);
-        //         return YachtCard(currentYacht, index);
-
-        // Card(
-        //   clipBehavior: Clip.antiAlias,
-        //   child: InkWell(
-        //     onLongPress: () {/* ... */},
-        //     child: Padding(
-        //       padding: const EdgeInsets.all(8.0),
-        //       child: Column(
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         children: <Widget>[
-        //           SizedBox(
-        //             height: 5,
-        //           ),
-        //           Text(currentYacht.name),
-        //           SizedBox(
-        //             height: 5,
-        //           ),
-        //           Text("Index: $index"),
-        //           SizedBox(
-        //             height: 5,
-        //           ),
-        //           Text("imo: ${currentYacht.imo}"),
-        //           SizedBox(
-        //             height: 5,
-        //           ),
-        //           Text("key: ${currentYacht.key}"),
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        // );
-        //   },
-        // );
-        // },
       ),
       floatingActionButton: Builder(
         builder: (context) {
@@ -123,11 +67,6 @@ class _YachtsScreenState extends State<YachtsScreen> {
             child: Icon(Icons.add),
             onPressed: () {
               Navigator.pushNamed(context, EditYachtScreen.routeName);
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (context) => EditYachtScreen(),
-              //   ),
-              // );
             },
           );
         },

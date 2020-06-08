@@ -26,11 +26,10 @@ void main() async {
     Yacht newYacht = Yacht(name: 'Aaa', imo: 111, length: 11.1);
     final yachtData1 =
         Provider.of<YachtData>(_childKey.currentContext, listen: false);
-    // return Container();
 
     yachtData1.addYacht(yacht: newYacht);
 
-    await tester.pump();
+    // await tester.pump();
 
     Yacht gotYacht = yachtData1.getYacht(0);
 
