@@ -14,7 +14,7 @@ void main() {
       expect(yacht.imo, 1111111);
       expect(yacht.length, 111);
 
-      print(yacht);
+      //print(yacht);
     });
 
     test('Create a yacht from a map', () {
@@ -29,7 +29,7 @@ void main() {
       expect(yacht.imo, 2222222);
       expect(yacht.length, 222.2);
 
-      print(yacht);
+      //print(yacht);
     });
 
     test('Convert a yacht to a map', () {

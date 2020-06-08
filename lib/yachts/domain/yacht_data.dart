@@ -1,47 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:yacht_hive/core/logs/log.dart';
 import 'package:yacht_hive/yachts/domain/yacht.dart';
+import 'package:yacht_hive/yachts/domain/yacht_box.dart';
 
 class YachtData extends ChangeNotifier {
-  static const _yachtBoxName = 'yachtBox';
 
   List<Yacht> _yachts = [];
 
   Yacht _activeYacht;
 
   void getYachts() async {
-    var box = await Hive.openBox<Yacht>(_yachtBoxName);
-    _yachts = box.values.toList();
+    _yachts = await YachtBox().getYachts();
     notifyListeners();
   }
 
   Yacht getYacht(index) {
+    print('Getting yacht');
     return _yachts[index];
   }
 
+  Yacht getYachtName({String name}) {
+    var index = _yachts.indexWhere((yacht) => yacht.name == name);
+    print('index: $index');
+    return getYacht(index);
+  }
+
   void addYacht({Yacht yacht}) async{
-    var box = await Hive.openBox<Yacht>(_yachtBoxName);
-    await box.add(yacht);
-    _yachts = box.values.toList();
+    print('Adding yacht: ${yacht.name}');
+    YachtBox().addYacht(yacht: yacht);
+    _yachts.add(yacht);
+    print('First yacht: ${_yachts[0].toString()}');
     notifyListeners();
   }
 
   void deleteYacht(key) async {
-    var box = await Hive.openBox<Yacht>(_yachtBoxName);
-    await box.delete(key);
-    _yachts = box.values.toList();
+    YachtBox().deleteYacht(key);
+    _yachts.removeWhere((yacht) => yacht.key == key);
 
     Log.i('Deleted yacht with key ${key.toString()}');
 
     notifyListeners();
   }
-  void editYacht({Yacht yacht, int yachtKey}) async{
-    var box = await Hive.openBox<Yacht>(_yachtBoxName);
-    await box.put(yachtKey, yacht);
-    _yachts = box.values.toList();
 
-    _activeYacht = box.get(yachtKey);
+  void editYacht({Yacht yacht, int yachtKey}) async{
+    YachtBox().editYacht(yacht: yacht, yachtKey: yachtKey);
+    _yachts.removeWhere((yacht) => yacht.key == yachtKey);
+    _yachts.add(yacht);
+
+    _activeYacht = yacht;
 
     Log.i('Edited yacht ${yacht.name}');
 
@@ -49,8 +55,7 @@ class YachtData extends ChangeNotifier {
   }
 
   void setActiveYacht(key) async {
-    var box = await Hive.openBox<Yacht>(_yachtBoxName);
-    _activeYacht = box.get(key);
+    _activeYacht = _yachts.firstWhere((yacht) => yacht.key == key);
 
     notifyListeners();
   }
