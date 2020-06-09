@@ -17,7 +17,7 @@ void main() {
       //print(yacht);
     });
 
-    test('Create a yacht from a map', () {
+    test('Instantiate a yacht from a map', () {
       Map<String, dynamic> map = {
         'name': 'Bbb',
         'imo': 2222222,

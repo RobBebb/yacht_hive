@@ -2,6 +2,8 @@ import 'package:test/test.dart';
 import 'package:yacht_hive/yachts/domain/yacht_validator.dart';
 
 void main() {
+
+  
   group('Yacht validate name...', () {
     test('Empty name returns an error', () {
       var result = NameFieldValidator.validate('');

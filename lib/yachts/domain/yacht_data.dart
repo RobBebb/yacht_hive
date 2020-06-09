@@ -15,21 +15,17 @@ class YachtData extends ChangeNotifier {
   }
 
   Yacht getYacht(index) {
-    print('Getting yacht');
     return _yachts[index];
   }
 
   Yacht getYachtName({String name}) {
     var index = _yachts.indexWhere((yacht) => yacht.name == name);
-    print('index: $index');
     return getYacht(index);
   }
 
   void addYacht({Yacht yacht}) async{
-    print('Adding yacht: ${yacht.name}');
     YachtBox().addYacht(yacht: yacht);
     _yachts.add(yacht);
-    print('First yacht: ${_yachts[0].toString()}');
     notifyListeners();
   }
 
