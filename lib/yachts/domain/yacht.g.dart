@@ -8,8 +8,8 @@ part of 'yacht.dart';
 
 class YachtAdapter extends TypeAdapter<Yacht> {
   @override
-  final typeId = 1;
-  
+  final typeId = 0;
+
   @override
   Yacht read(BinaryReader reader) {
     var numOfFields = reader.readByte();
@@ -17,21 +17,27 @@ class YachtAdapter extends TypeAdapter<Yacht> {
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Yacht(
-      name: fields[0] as String,
-      imo: fields[1] as int,
-      length: fields[2] as double,
+      id: fields[0] as String,
+      name: fields[1] as String,
+      imo: fields[2] as int,
+      length: fields[3] as double,
+      buildDate: fields[4] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, Yacht obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.imo)
+      ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.length);
+      ..write(obj.imo)
+      ..writeByte(3)
+      ..write(obj.length)
+      ..writeByte(4)
+      ..write(obj.buildDate);
   }
 }

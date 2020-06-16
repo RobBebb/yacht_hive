@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yacht_hive/yachts/domain/yacht_data.dart';
 
-import '../widgets/yacht_card.dart';
-import './edit_yacht_screen.dart';
+import 'package:yacht_hive/yachts/presentation/widgets/yacht_card.dart';
+import 'package:yacht_hive/yachts/presentation/screens/edit_yacht_screen.dart';
 
 const String yachtBoxName = 'yacht';
 
@@ -34,6 +34,7 @@ class _YachtsScreenState extends State<YachtsScreen> {
             ),
             Text(
               'Yachts',
+              key: Key('title'),
               style: TextStyle(
                   fontSize: Theme.of(context).textTheme.headline6.fontSize),
             ),
@@ -41,6 +42,7 @@ class _YachtsScreenState extends State<YachtsScreen> {
         ),
         actions: <Widget>[
           IconButton(
+            key: Key('add_IconButton'),
             icon: Icon(Icons.add),
             onPressed: () {
               Navigator.of(context).pushNamed(EditYachtScreen.routeName);
@@ -63,6 +65,7 @@ class _YachtsScreenState extends State<YachtsScreen> {
       floatingActionButton: Builder(
         builder: (context) {
           return FloatingActionButton(
+            key: Key('fab'),
             backgroundColor: Theme.of(context).primaryColor,
             child: Icon(Icons.add),
             onPressed: () {

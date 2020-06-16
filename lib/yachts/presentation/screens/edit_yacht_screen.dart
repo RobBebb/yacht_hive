@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+
+import 'package:yacht_hive/yachts/domain/yacht.dart';
 import 'package:yacht_hive/yachts/domain/yacht_data.dart';
 import 'package:yacht_hive/yachts/domain/yacht_validator.dart';
-
-import '../../domain/yacht.dart';
 
 const String yachtBoxName = 'yacht';
 
@@ -22,18 +23,47 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
   Yacht yacht;
 
   var _initValues = {
+    'id': '',
     'name': '',
     'imo': '',
     'length': '',
+    'buildDate': '',
   };
 
   var _editedYacht = Yacht(
+    id: '',
     name: '',
     imo: null,
     length: null,
+    buildDate: null,
   );
 
   var _isInit = true;
+
+  DateTime _dateSelected;
+
+  _showDateTimePicker() async {
+    _dateSelected = await showDatePicker(
+      context: context,
+      initialDate: _initValues['buildDate'] == ''
+          ? DateTime.parse('20000101')
+          : DateTime.parse(_initValues['buildDate']),
+      // initialDate: yacht == null ? DateTime.now() : _editedYacht.buildDate,
+      firstDate: DateTime(1960, 1, 1),
+      lastDate: DateTime(2050, 1, 1),
+    );
+
+    _editedYacht = Yacht(
+      id: _editedYacht.id,
+      name: _editedYacht.name,
+      imo: _editedYacht.imo,
+      length: _editedYacht.length,
+      buildDate: _dateSelected,
+    );
+    setState(() {
+      _initValues['buildDate'] = _dateSelected?.toIso8601String();
+    });
+  }
 
   @override
   void didChangeDependencies() {
@@ -41,9 +71,11 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
       yacht = ModalRoute.of(context).settings.arguments as Yacht;
       if (yacht != null) {
         _initValues = {
-          'name': yacht.name,
-          'imo': yacht.imo.toString(),
-          'length': yacht.length.toString(),
+          'id': yacht.id,
+          'name': yacht.name == null ? '' : yacht.name,
+          'imo': yacht.imo?.toString(),
+          'length': yacht.length?.toString(),
+          'buildDate': yacht.buildDate?.toIso8601String(),
         };
       }
     }
@@ -59,14 +91,20 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
   }
 
   Future<void> _saveForm() async {
+    print('_saveForm');
     final isValid = _form.currentState.validate();
+    print('After calling validate');
+    print('isValid $isValid');
     if (!isValid) {
       return;
     }
+    print('Before save');
     _form.currentState.save();
+    print('After save');
+    print('Before provider');
     if (yacht != null) {
       Provider.of<YachtData>(context, listen: false)
-          .editYacht(yacht: _editedYacht, yachtKey: yacht.key);
+          .editYacht(yacht: _editedYacht, id: yacht.id);
     } else {
       Provider.of<YachtData>(context, listen: false)
           .addYacht(yacht: _editedYacht);
@@ -86,7 +124,8 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
               width: 20,
             ),
             Text(
-              'Add Yacht',
+              yacht == null ? 'Add Yacht' : 'Edit Yacht',
+              key: Key('title'),
               style: TextStyle(
                   fontSize: Theme.of(context).textTheme.headline6.fontSize),
             ),
@@ -94,6 +133,7 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
         ),
         actions: <Widget>[
           IconButton(
+            key: Key('saveIcon'),
             icon: Icon(Icons.save),
             onPressed: _saveForm,
           ),
@@ -106,6 +146,7 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
           child: ListView(
             children: <Widget>[
               TextFormField(
+                key: Key('nameTextFormField'),
                 initialValue: _initValues['name'],
                 decoration: InputDecoration(labelText: 'Name'),
                 textInputAction: TextInputAction.next,
@@ -115,13 +156,16 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
                 validator: NameFieldValidator.validate,
                 onSaved: (value) {
                   _editedYacht = Yacht(
+                    id: _editedYacht.id,
                     name: value,
                     imo: _editedYacht.imo,
                     length: _editedYacht.length,
+                    buildDate: _editedYacht.buildDate,
                   );
                 },
               ),
               TextFormField(
+                key: Key('imoTextFormField'),
                 initialValue: _initValues['imo'],
                 decoration: InputDecoration(labelText: 'IMO'),
                 textInputAction: TextInputAction.next,
@@ -133,13 +177,16 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
                 validator: ImoFieldValidator.validate,
                 onSaved: (value) {
                   _editedYacht = Yacht(
+                    id: _editedYacht.id,
                     name: _editedYacht.name,
                     imo: int.parse(value),
                     length: _editedYacht.length,
+                    buildDate: _editedYacht.buildDate,
                   );
                 },
               ),
               TextFormField(
+                key: Key('lengthTextFormField'),
                 initialValue: _initValues['length'],
                 decoration: InputDecoration(labelText: 'Length'),
                 textInputAction: TextInputAction.done,
@@ -151,12 +198,34 @@ class _EditYachtScreenState extends State<EditYachtScreen> {
                 validator: LengthFieldValidator.validate,
                 onSaved: (value) {
                   _editedYacht = Yacht(
+                    id: _editedYacht.id,
                     name: _editedYacht.name,
                     imo: _editedYacht.imo,
                     length: double.parse(value),
+                    buildDate: _editedYacht.buildDate,
                   );
                 },
-              )
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  _initValues['buildDate'] != ''
+                      ? Text(
+                          DateFormat.yMMMMd().format(
+                            DateTime.parse(_initValues['buildDate']),
+                          ),
+                          key: Key('buildDateText'),
+                        )
+                      : SizedBox(width: 0.0),
+                  IconButton(
+                    key: Key('buildDatePicker'),
+                    icon: Icon(
+                      Icons.calendar_today,
+                    ),
+                    onPressed: () => _showDateTimePicker(),
+                  )
+                ],
+              ),
             ],
           ),
         ),

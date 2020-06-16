@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:yacht_hive/core/logs/log.dart';
+
+// import 'package:yacht_hive/core/logs/log.dart';
 import 'package:yacht_hive/yachts/domain/yacht.dart';
 
 class YachtBox {
@@ -10,24 +11,31 @@ class YachtBox {
     return box.values.toList();
   }
 
-  void addYacht({Yacht yacht}) async{
-    print('Adding yacht: ${yacht.name}');
+    Future<Yacht> getYacht({key}) async {
     var box = await Hive.openBox<Yacht>(_yachtBoxName);
-    box.add(yacht);
+    return box.get(key);
   }
 
-  void deleteYacht(key) async {
+
+  void addYacht({Yacht yacht}) async {
+    // print('Adding yacht: ${yacht.name}');
+    var box = await Hive.openBox<Yacht>(_yachtBoxName);
+    box.put(yacht.id, yacht);
+
+    // Log.i('Added yacht with key ${yacht.toString()}');
+  }
+
+  void deleteYacht({String key}) async {
     var box = await Hive.openBox<Yacht>(_yachtBoxName);
     await box.delete(key);
 
-    Log.i('Deleted yacht with key ${key.toString()}');
+    // Log.i('Deleted yacht with key $key');
   }
 
-  void editYacht({Yacht yacht, int yachtKey}) async{
+  void editYacht({Yacht yacht, String key}) async {
     var box = await Hive.openBox<Yacht>(_yachtBoxName);
-    await box.put(yachtKey, yacht);
+    await box.put(key, yacht);
 
-    Log.i('Edited yacht ${yacht.name}');
+    // Log.i('Edited yacht ${yacht.name}');
   }
-
 }

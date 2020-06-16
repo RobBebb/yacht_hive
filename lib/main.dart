@@ -3,11 +3,11 @@ import 'package:flutter/rendering.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:yacht_hive/yachts/domain/yacht_data.dart';
 
-import './yachts/presentation/screens/yachts_screen.dart';
-import './yachts/presentation/screens/edit_yacht_screen.dart';
-import './yachts/domain/yacht.dart';
+import 'package:yacht_hive/yachts/presentation/screens/yachts_screen.dart';
+import 'package:yacht_hive/yachts/presentation/screens/edit_yacht_screen.dart';
+import 'package:yacht_hive/yachts/domain/yacht_data.dart';
+import 'package:yacht_hive/yachts/domain/yacht.dart';
 
 const String yachtBoxName = 'yacht';
 void main() async {
@@ -16,7 +16,6 @@ void main() async {
   runApp(
     YachtApp(),
   );
-  // await Hive.close();
 }
 
 class YachtApp extends StatelessWidget {

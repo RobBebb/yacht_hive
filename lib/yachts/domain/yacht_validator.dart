@@ -1,5 +1,6 @@
 class NameFieldValidator {
   static String validate(String value) {
+    // print('NameFieldValidator $value');
     if (value.isEmpty) {
       return 'Please provide a name.';
     }

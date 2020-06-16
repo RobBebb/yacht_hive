@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yacht_hive/yachts/domain/yacht_data.dart';
 
-import '../../domain/yacht.dart';
-import '../screens/edit_yacht_screen.dart';
+import 'package:yacht_hive/yachts/domain/yacht_data.dart';
+import 'package:yacht_hive/yachts/domain/yacht.dart';
+import 'package:yacht_hive/yachts/presentation/screens/edit_yacht_screen.dart';
 
 const String yachtBoxName = 'yacht';
 
@@ -21,14 +21,14 @@ class _YachtCardState extends State<YachtCard> {
 
   void onYachtDelete() {
     Provider.of<YachtData>(context, listen: false)
-        .deleteYacht(currentYacht.key);
+        .deleteYacht(id: currentYacht.id);
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<YachtData>(
       builder: (context, yachtData, child) {
-        currentYacht = yachtData.getYacht(widget.yachtIndex);
+        currentYacht = yachtData.getYacht(index: widget.yachtIndex);
         return Container(
           child: Card(
             margin: EdgeInsets.all(5),
@@ -41,6 +41,7 @@ class _YachtCardState extends State<YachtCard> {
                     children: <Widget>[
                       Text(
                         currentYacht.name,
+                        key: Key('name'),
                         style: TextStyle(
                           fontSize: 30,
                         ),
@@ -50,12 +51,14 @@ class _YachtCardState extends State<YachtCard> {
                       ),
                       Text(
                         'IMO: ${currentYacht.imo.toString()}',
+                        key: Key('imo'),
                       ),
                       SizedBox(
                         height: 10,
                       ),
                       Text(
                         'Length: ${currentYacht.length.toString()}',
+                        key: Key('length'),
                       ),
                     ],
                   ),
